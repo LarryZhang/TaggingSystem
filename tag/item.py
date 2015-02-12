@@ -1,9 +1,9 @@
 __author__ = 'LarryZ'
-from flask import redirect
-from flask.ext.restful import reqparse, abort, Api, Resource, request,url_for
-from TaggingSystem import  mongo,api,app
+from flask.ext.restful import Resource, request
 from bson import ObjectId,json_util
-from tag import Tag
+
+from TaggingSystem import  mongo,api,app
+
 
 class Item(Resource):
     items_mongo=None
