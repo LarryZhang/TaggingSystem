@@ -1,5 +1,5 @@
 import TaggingSystem
-from tag import tag,item
+import tag ,item
 
 if __name__=='__main__':
     import sys
