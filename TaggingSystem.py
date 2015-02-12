@@ -1,18 +1,30 @@
+import os
 from flask import Flask
-from Tag_handler import Tag_Handler
-app = Flask(__name__)
-from pymongo import MongoClient
-
-test_mongodb=MongoClient('218.244.157.158',port=37017)['test']
-tag_handler=Tag_Handler(test_mongodb)
+from flask.ext import restful
+from flask.ext.pymongo import PyMongo
+from flask import make_response
 from bson.json_util import dumps
 
-@app.route('/')
-def hello_world():
+MONGO_URL = os.environ.get('MONGO_URL')
+if not MONGO_URL:
+    MONGO_URL = "mongodb://218.244.157.158:37017/rest";
 
-    return dumps(tag_handler.tag_tree_dict)
+app = Flask(__name__)
+
+app.config['MONGO_URI'] = MONGO_URL
+mongo = PyMongo(app)
+
+def output_json(obj, code, headers=None):
+    resp = make_response(dumps(obj), code)
+    resp.headers.extend(headers or {})
+    return resp
+
+DEFAULT_REPRESENTATIONS = {'application/json': output_json}
+api = restful.Api(app)
+api.representations = DEFAULT_REPRESENTATIONS
 
 
-if __name__ == '__main__':
-    app.run()
 
+print __name__
+if __name__=='__main__':
+    app.run(debug=True)
