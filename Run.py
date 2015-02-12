@@ -1,6 +1,5 @@
-import  TaggingSystem
-import tag
-import item
+import TaggingSystem
+
 
 if __name__=='__main__':
     TaggingSystem.app.run(debug=True)
