@@ -1,0 +1,6 @@
+FROM dockerfile/python:2.7.9
+WORKDIR /srv
+ADD ./requirements.txt /srv/requirements.txt
+RUN pip install -r requirements.txt
+ADD . /srv
+CMD python /srv/Run.py
