@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.min.css">
+
+<script type="text/ng-template" id="nodes_renderer.html">
+    <div ui-tree-handle class="tree-node tree-node-content">
+        <a class="btn btn-success btn-xs" ng-if="tag.children && tag.children.length > 0" nodrag
+           ng-click="selectTag(tag)"><span class="glyphicon"
+                                           ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}"></span></a>
+        {{tag.name}}
+        <a class="pull-right btn btn-danger btn-xs" nodrag ng-click="selectTag(tag)"><span
+                class="glyphicon glyphicon-remove"></span></a>
+        <a class="pull-right btn btn-primary btn-xs" nodrag ng-click="selectTag(tag)" style="margin-right: 8px;"><span
+                class="glyphicon glyphicon-plus"></span></a>
+    </div>
+    <ol ui-tree-nodes="" ng-model="tag.children" ng-class="{hidden: collapsed}">
+        <li ng-repeat="tag in tag.children" ui-tree-node ng-include="'nodes_renderer.html'">
+        </li>
+    </ol>
+</script>
+<div class="row">
+    <div class="col-md-8">
+        <div ui-tree id="tree-root">
+            <ol ui-tree-nodes ng-model="rootTags">
+                <li ng-repeat="tag in rootTags" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+            </ol>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <p>for input</p>
+    </div>
+</div>

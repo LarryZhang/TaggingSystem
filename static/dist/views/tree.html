@@ -1,0 +1,45 @@
+<h3>标签录入</h3>
+<div class="row">
+    <div class="col-md-8">
+        <div style="width:250px;margin-left:0px;background:whitesmoke;border:1px solid lightgray;border-radius:5px;">
+            <span ng-if="doing_async">...loading...</span>
+            <abn-tree
+                    tree-data="rootTags"
+                    tree-control="tagTreeControl"
+                    on-select="selectTag(branch)"
+                    expand-level="2">
+
+            </abn-tree>
+
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <span >名称 </span>
+
+            <input type="text" class="form-control" placeholder="名称" ng-model="selectedTag.label">
+        </div>
+        <div class="form-group">
+            <span >父节点 </span>
+
+
+            <select class="form-control" ng-model="selectedTag.parent_id"
+                    ng-options="tag._id.$oid as tag.label for tag in tagList">
+                <option></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <span>描述</span>
+
+            <textarea class="form-control" placeholder="描述" aria-describedby="basic-addon1"
+                   ng-model="selectedTag.description"/>
+
+        </div>
+        <div class="btn-group" role="group" aria-label="">
+            <button type="button" class="btn btn-default" ng-click="createNew()" >清空</button>
+            <button type="button" class="btn btn-default" ng-click="submit()" ng-bind-html="{true:'新建',false:'修改'}[!selectedTag._id]"></button>
+
+        </div>
+
+    </div>
+</div>

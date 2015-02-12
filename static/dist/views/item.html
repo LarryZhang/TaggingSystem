@@ -1,0 +1,144 @@
+<style type="text/css">
+
+    .drop-box {
+        background: #F8F8F8;
+        border: 5px dashed #DDD;
+        width: 200px;
+        height: 65px;
+        text-align: center;
+        padding-top: 25px;
+        margin: 10px;
+    }
+
+    .thumbnail {
+        display: block;
+        padding: 4px;
+        margin-bottom: 20px;
+        line-height: 1.42857143;
+        background-color: #ffffff;
+        border: 1px solid #dddddd;
+        border-radius: 0;
+        -webkit-transition: all 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out;
+    }
+</style>
+ <h3>
+            商品管理
+        </h3>
+
+
+
+<div class="row">
+    <div class="col-md-8">
+
+        <!--<div ui-grid-expandable-buttons-cell="gridOptions" class="myGrid"></div>-->
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>
+                    名称
+                </th>
+                <th>
+                    描述
+                </th>
+                <th>
+                    便签
+                </th>
+                <th>
+                    图片
+                </th>
+            </tr>
+
+            </thead>
+            　
+            <tbody ng-repeat="item in allItems">
+            <tr ng-click="selectItem(item)" ng-class="{true:'active',false:'inactive'}[item==selectedItem]">
+                <td>{{item.label}}</td>
+                <td>
+                    {{item.description}}
+                </td>
+                <td>
+
+                    <ui-select multiple ng-model="item.tags" ng-disabled="true" ng-if="item.tags&&item.tags.length>0">
+                        <ui-select-match placeholder="选择标签">{{$item.label}}</ui-select-match>
+                        <ui-select-choices repeat=" tag._id['$oid']  as tag in tagList">
+
+                        </ui-select-choices>
+
+                    </ui-select>
+                </td>
+                <td>
+                     <div ng-repeat="file in item.files" class="col-md-3" ng-if="item.files&&item.files.length>0">
+                <a href="/api/uploads/{{file.location}}" target="_blank">
+                    <img class="thumbnail img-responsive" ng-src="/api/uploads/{{file.location}}"/>
+
+                </a>
+                         </div>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+
+        <div class="form-group row">
+            <span>名称：</span>
+
+            <input type="text" class="form-control" placeholder="名称" ng-minlength="1" ng-model="selectedItem.label">
+        </div>
+
+        <div class="form-group row">
+            <span>描述:</span>
+
+            <textarea class="form-control" placeholder="Description" name="Description"
+                      ng-model="selectedItem.description">
+                </textarea>
+
+        </div>
+        <div class="form-group row">
+                            <span>图片</span>
+
+        <div ng-file-drop ng-file-select ng-model="files" class="drop-box row"
+             drag-over-class="dragover" ng-multiple="true" allow-dir="true"
+             accept="image/*,application/pdf">拖拉文件
+        </div>
+            </div>
+        <div class="form-group row" ng-if="selectedItem">
+
+            <div ng-repeat="file in selectedItem.files" class="col-md-6">
+                <a href="/api/uploads/{{file.location}}" target="_blank">
+                    <img class="thumbnail img-responsive" ng-src="/api/uploads/{{file.location}}"/>
+
+                </a>
+                <span><a ng-click="deleteFile(file,$index)" class="glyphicon glyphicon-remove"/>{{file.filename}}</span>
+
+            </div>
+        </div>
+        <div class="row ">
+                        <span>标签</span>
+
+            <ui-select multiple ng-model="selectedItem.tags" reset-search-input="true">
+                <ui-select-match placeholder="选择标签">{{$item.label}}</ui-select-match>
+                <ui-select-choices
+                        repeat=" tag._id['$oid']  as tag in tagList|propsFilter:{label:$select.search,description:$select.search}">
+                    <div ng-bind-html="tag.label | highlight: $select.search"></div>
+                    <small>
+                        desc: {{tag.description}}
+                    </small>
+                </ui-select-choices>
+
+            </ui-select>
+
+
+        </div>
+
+        <div class="btn-group row" role="group" aria-label="">
+            <button type="button" class="btn btn-default" ng-click="createNew()">清空</button>
+            <button type="button" class="btn btn-default" ng-click="submit()"
+                    ng-bind-html="{true:'新建',false:'修改'}[!selectedItem._id]"></button>
+            <button type="button" class="btn btn-default" ng-click="deleteItem()" ng-if="selectedItem._id">删除</button>
+
+        </div>
+    </div>
+</div>
